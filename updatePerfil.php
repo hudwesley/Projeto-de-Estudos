@@ -10,20 +10,18 @@ if (isset($_POST["nome"])) {
     $email = $_POST["email"];
     $senha = $_POST["senha"];
     $tipo = $_POST["tipo"];
-    $situacao = $_POST["situacao"];
     
 
     $sql = "UPDATE usuario SET nome = '$nome', sobrenome = '$sobrenome', telefone = '$telefone', email = '$email', 
-    senha = '$senha', tipo = $tipo, situacao = $situacao WHERE idUsuario = $idUsuario";
+    senha = '$senha', tipo = $tipo WHERE idUsuario = $idUsuario";
 
     try {
         $conn->query($sql);
-        header("location: editarUsuario.php?idUsuario=" . $idUsuario);
+        header("location: perfil.php");
         $_SESSION["sucesso"] = '<div class="alert alert-success" role="alert">
         <i style="font-size:24px" class="fas">&#xf058;</i> Usuário atualizado com sucesso!
       </div>';
-
     } catch (Exception $e) {
-       echo $e;
+        echo $e;
     }
 }

@@ -21,54 +21,116 @@ session_start();
 
 <body>
     <?php
+    // verifica se foi iniciada uma sessão
     if (isset($_SESSION["usuario"])) {
+        // verifica se o usuário logado é do tipo 1
         if ($_SESSION["tipo"] == 1) {
     ?>
             <div class="sidebar">
-                <header>Projeto Aleatorio</header>
+                <header>Projeto</header>
                 <ul>
                     <li><a href="#"><i style='font-size:24px' class='far'>&#xf2b9;</i> Agenda</a></li>
                     <li><a href="usuarios.php"><i style='font-size:24px' class='fas'>&#xf500;</i> Usuários</a></li>
-                    
+
                 </ul>
                 <div class="drop">
                     <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i style='font-size:24px' class='fas'>&#xf2bd;</i> <?php echo $_SESSION["usuario"] ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Perfil</a>
+                            <a class="dropdown-item" href="perfil.php">Perfil</a>
                             <a class="dropdown-item" href="logout.php">Sair</a>
                         </div>
                     </div>
                 </div>
             </div>
+            <?php
+            $sql = "SELECT * FROM usuario";
+            $dados = $conn->query($sql);
+            $totalContas = 0;
+            $totalCliente = 0;
+            $totalAdm = 0;
+            $regTotais = 0;
+            $regAdm = 0;
+            $regCliente = 0;
+            if ($dados->num_rows > 0) {
+                while ($exibir = $dados->fetch_assoc()) {
+                    if ($exibir["tipo"] == 1 && $exibir["situacao"] == 0) {
+                        $regAdm += 1;
+                    } elseif ($exibir["tipo"] == 2 && $exibir["situacao"] == 0) {
+                        $regCliente += 1;
+                    }
 
+                    if ($exibir["tipo"] == 1) {
+                        $totalAdm += 1;
+                    } elseif ($exibir["tipo"] == 2) {
+                        $totalCliente += 1;
+                    }
+                }
+            }
+            $regTotais = $regAdm + $regCliente;
+            $totalContas = $totalAdm + $totalCliente;
+            ?>
+            <div class="pendentes">
+                <h2>Contas pendentes</h2>
+                <table class="table table">
+                    <tr style="background: rgb(41, 106, 180); color: whitesmoke;">
+                        <th scope="col">Cliente(s)</th>
+                        <th scope="col">Administrador(es)</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                    <tr class="table-secondary">
+                        <td><?php echo $regCliente ?></td>
+                        <td><?php echo $regAdm ?></td>
+                        <td scope="row"><?php echo $regTotais ?></td>
+                    </tr>
+                </table>
+            </div>
+           
+            <div class="pendentes">
+                <h2>Total de contas</h2>
+                <table class="table table">
+                    <tr style="background: rgb(41, 106, 180); color: whitesmoke;">
+                        <th scope="col">Cliente(s)</th>
+                        <th scope="col">Administrador(es)</th>
+                        <th scope="col">Total </th>
+                    </tr>
+                    <tr class="table-secondary">
+                        <td><?php echo $totalCliente ?></td>
+                        <td><?php echo $totalAdm ?></td>
+                        <td scope="row"><?php echo $totalContas ?></td>
+                    </tr>
+                </table>
+            </div>
         <?php
+            // verifica se o usuário logado é do tipo 2
         } elseif ($_SESSION["tipo"] == 2) {
         ?>
             <div class="sidebar">
-            <header>Projeto Aleatorio</header>
+                <header><i class='fas fa-house-user' style='font-size:24px'></i>Projeto</header>
                 <ul>
                     <li><a href="#"><i style='font-size:24px' class='far'>&#xf2b9;</i> Agenda</a></li>
                     <li><a href="#"><i style="font-size:24px" class="far">&#xf03e;</i> Galeria</a></li>
                 </ul>
                 <div class="drop">
                     <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i style='font-size:24px' class='fas'>&#xf2bd;</i> <?php echo $_SESSION["usuario"] ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Perfil</a>
+                            <a class="dropdown-item" href="perfil.php">Perfil</a>
                             <a class="dropdown-item" href="logout.php">Sair</a>
                         </div>
                     </div>
                 </div>
             </div>
+            <a href="#" class="topo"><i style='font-size:24px' class='fas'>&#xf35b;</i></a>
         <?php
         }
         ?>
     <?php
+        // se não tiver nenhuma sessão iniciada, redireciona para a tela de login
     } else {
     ?>
         <script>
@@ -79,5 +141,25 @@ session_start();
     }
     ?>
 </body>
+<script>
+    jQuery(document).ready(function() {
+        // Exibe ou oculta o botão
+        jQuery(window).scroll(function() {
+            if (jQuery(this).scrollTop() > 200) {
+                jQuery('.topo').fadeIn(200);
+            } else {
+                jQuery('.topo').fadeOut(200);
+            }
+        });
+
+        // Faz animação para subir
+        jQuery('.topo').click(function(event) {
+            event.preventDefault();
+            jQuery('html, body').animate({
+                scrollTop: 0
+            }, 300);
+        })
+    });
+</script>
 
 </html>

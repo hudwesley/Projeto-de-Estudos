@@ -21,32 +21,44 @@ session_start();
 
 <body>
     <?php
+    // verifica se foi iniciada uma sessão
     if (isset($_SESSION["usuario"])) {
+        $idUsuario = $_SESSION["idUsuario"];
+        // verifica se o usuário logado é do tipo 1
         if ($_SESSION["tipo"] == 1) {
 
     ?>
             <div class="sidebar">
-                <header><a href="homeLogin.php">Home</a></header>
+                <header><a href="homeLogin.php">PROJETO</a></header>
                 <ul>
                     <li><a href="#"><i style='font-size:24px' class='far'>&#xf2b9;</i> Agenda</a></li>
                     <li><a href="usuarios.php"><i style='font-size:24px' class='fas'>&#xf500;</i> Usuários</a></li>
                 </ul>
                 <div class="drop">
                     <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i style='font-size:24px' class='fas'>&#xf2bd;</i> <?php echo $_SESSION["usuario"] ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Perfil</a>
+                            <a class="dropdown-item" href="perfil.php">Perfil</a>
                             <a class="dropdown-item" href="logout.php">Sair</a>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <?php
+            if (isset($_SESSION["sucesso"])) {
+                echo $_SESSION["sucesso"];
+                unset($_SESSION["sucesso"]);
+            }
+            if (isset($_SESSION["erro"])) {
+                echo $_SESSION["erro"];
+                unset($_SESSION["erro"]);
+            }
+            ?>
             <table class="table table-light" style="margin-top: 10px">
                 <thead>
-                    <tr class="table-danger">
+                    <tr class="table-primary">
                         <th scope="col">Nome</th>
                         <th scope="col">Sobrenome</th>
                         <th scope="col">Telefone</th>
@@ -58,7 +70,7 @@ session_start();
                     </tr>
                 </thead>
                 <?php
-                $sql = "SELECT * FROM usuario";
+                $sql = "SELECT * FROM usuario WHERE idUsuario != $idUsuario ORDER BY nome";
                 $dados = $conn->query($sql);
 
                 if ($dados->num_rows > 0) {
@@ -91,8 +103,8 @@ session_start();
                                 <?php
                                 }
                                 ?>
-                                <td><a href="editarUsuario.php?idUsuario=<?php echo $exibir["idUsuario"] ?>"><i style='font-size:24px' class='fas'>&#xf303;</i></a></td>
-                                <td><a href="#" onclick="excluir('<?php echo $exibir["idUsuario"] ?>', '<?php echo $exibir["nome"] ?>')"><i style="font-size:24px" class="fa">&#xf00d;</i></a></td>
+                                <td><a href="#" onclick="editar('<?php echo $exibir["idUsuario"] ?>', '<?php echo $exibir["nome"] ?>')"><i style='font-size:24px' class='fas'>&#xf303;</i></a></td>
+                                <td><a href="#" onclick="excluir('<?php echo $exibir["idUsuario"] ?>', '<?php echo $exibir["nome"] ?>')"><i style='font-size:24px' class='fas'>&#xf1f8;</i></a></td>
                             </tr>
                         </tbody>
 
@@ -100,6 +112,7 @@ session_start();
                 } ?>
             </table>
         <?php
+            // se o usuário não for do tipo 1, vai negar o acesso a está página
         } else {
         ?>
             <script>
@@ -108,6 +121,7 @@ session_start();
             </script>
         <?php
         }
+        // se não tiver nenhuma sessão iniciada, redireciona para a tela de login
     } else {
         ?>
         <script>
@@ -123,6 +137,12 @@ session_start();
     function excluir(idUsuario, nome) {
         if (window.confirm("Deseja excluir este usuário ? " + nome)) {
             window.location = "deleteUsuario.php?idUsuario=" + idUsuario;
+        }
+    }
+
+    function editar(idUsuario, nome) {
+        if (window.confirm("Deseja editar este usuário ? " + nome)) {
+            window.location = "editarUsuario.php?idUsuario=" + idUsuario;
         }
     }
 

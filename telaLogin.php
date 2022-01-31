@@ -22,42 +22,49 @@ session_start();
 <body>
     <div class="sidebar">
         <ul>
-            <header><a href="index.php" style="font-size: 30px; color: black; margin-right: 30px;">PROJETO</a></header>
-            <li><a href="#"><i style='font-size:24px' class='far'>&#xf2b9;</i> Sobre</a></li>
-            <li><a href="#"><i style="font-size:24px" class="fa">&#xf03e;</i> Galeria</a></li>
-            <li><a href="#"><i style='font-size:24px' class='fas'>&#xf674;</i> Contato</a></li>
+            <header><a href="index.php" style="font-size: 30px; margin-right: 30px;">PROJETO</a></header>
+            <li><a href="index.php#sobre"><i style='font-size:24px' class='far'>&#xf2b9;</i> Sobre</a></li>
+            <li><a href="index.php#galeria"><i style="font-size:24px" class="fa">&#xf03e;</i> Galeria</a></li>
+            <li><a href="index.php#contato"><i style='font-size:24px' class='fas'>&#xf674;</i> Contato</a></li>
             <li><a href="cadUser.php"><i style='font-size:24px' class='fas'>&#xf234;</i> Cadastrar</a></li>
         </ul>
     </div>
-    <div class="comp">
-        <div class="login">
-            <form action="login.php" method="post">
-                <div class="titulo">
-                    <h2><i style='font-size:100px' class='fas'>&#xf2bd;</i></h2>
-                </div>
-                <div class="user">
-                    <label for="user"><i style='font-size:24px; color: darkorange;' class='fas'>&#xf406;</i> </label>
-                    <input type="text" name="user" id="email" required placeholder="E-mail" maxlength="45">
-                </div>
+        <div class="comp">
+            <div class="login">
+                <form action="login.php" method="post">
+                    <div class="titulo">
+                        <h2><i style='font-size:100px' class='fas'>&#xf2bd;</i></h2>
+                    </div>
+                    <div class="user">
+                        <label for="user"><i style='font-size:24px; color: rgb(41, 106, 180);' class='fas'>&#xf406;</i> </label>
+                        <input type="text" name="user" id="email" required placeholder="E-mail" maxlength="45">
+                    </div>
 
-                <div class="senha">
-                    <label for="senha"><i style='font-size:24px; color: darkorange;' class='fas'>&#xf09c;</i> </label>
-                    <input type="password" name="senha" id="senha" required placeholder="********" maxlength="20">
-                </div>
-
-                <div class="botoes">
-                    <button type="submit" class="btn btn-success">Entrar</button><br>
-                </div>
-                <?php if (isset($_SESSION["erro"])) {
-                    echo $_SESSION["erro"];
-                    unset($_SESSION["erro"]);
-                }
-                ?>
-            </form>
+                    <div class="senha">
+                        <label for="senha"><i style='font-size:24px; color: rgb(41, 106, 180);' class='fas'>&#xf09c;</i> </label>
+                        <input type="password" name="senha" id="senha" required placeholder="********" maxlength="20">
+                    </div>
+                    <div class="forget">
+                        <label for="forget"><a href="#">Esqueceu a senha?</a></label>
+                    </div>
+                    <div class="botoes">
+                        <button type="submit" class="btn btn-success">Entrar</button><br>
+                    </div>
+                    
+                    <!-- caso as informações estejam erradas, vai aparecer uma mensagem de erro -->
+                    
+                    <?php if (isset($_SESSION["erro"])) {
+                        echo $_SESSION["erro"];
+                        unset($_SESSION["erro"]);
+                        session_unset();
+                    }
+                    ?>
+                </form>
+            </div>
+            <div class="imagem">
+                <img src="img/Design sem nome.png" alt="">
+            </div>
         </div>
-        <div class="imagem">
-            <img src="img/Bem-vindo.png" alt="">
-        </div>
-    </div>
 </body>
+
 </html>

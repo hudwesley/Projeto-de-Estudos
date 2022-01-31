@@ -22,13 +22,26 @@ session_start();
 <body>
     <div class="sidebar">
         <ul>
-            <header><a href="index.php" style="font-size: 30px; color: black; margin-right: 30px;">PROJETO</a></header>
+            <header><a href="index.php" style="font-size: 30px;  margin-right: 30px;">PROJETO</a></header>
             <li><a href="index.php#sobre"><i style='font-size:24px' class='far'>&#xf2b9;</i> Sobre</a></li>
             <li><a href="index.php#galeria"><i style="font-size:24px" class="fa">&#xf03e;</i> Galeria</a></li>
             <li><a href="index.php#contato"><i style='font-size:24px' class='fas'>&#xf674;</i> Contato</a></li>
             <li><a href="telaLogin.php"><i style='font-size:24px' class='fas'>&#xf2f5;</i> Login</a></li>
         </ul>
     </div>
+    <?php
+    if (isset($_SESSION["msg"])) {
+        echo $_SESSION["msg"];
+        unset($_SESSION["msg"]);
+        ?>
+        <style>
+            .cadastro{
+                display: none;
+            }
+        </style>
+        <?php
+    }
+    ?>
     <center>
         <div class="cadastro">
             <form action="createUsuario.php" method="post">
@@ -69,12 +82,12 @@ session_start();
                 <div class="senha-cad">
                     <label for="senha">Senha</label>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" required placeholder="Senha" name="senha" required minlength="8" maxlength="20">
+                        <input type="password" class="form-control" required placeholder="Senha" name="senha" required maxlength="20">
                     </div>
                 </div>
 
                 <div class="tipo">
-                    <label for="tipo">Conta</label>
+                    <label for="tipo">Tipo de conta</label>
                     <select name="tipo" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                         <option value="1">Administrador</option>
                         <option value="2">Cliente</option>
@@ -85,6 +98,11 @@ session_start();
                     <button type="submit" class="btn btn-success">Cadastrar</button><br>
                     <button type="reset" class="btn btn-success">Cancelar</button><br>
                 </div>
+                <?php if (isset($_SESSION["erro"])) {
+                    echo $_SESSION["erro"];
+                    unset($_SESSION["erro"]);
+                }
+                ?>
             </form>
         </div>
     </center>
